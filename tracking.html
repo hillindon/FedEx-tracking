@@ -6,116 +6,182 @@
     <title>FedEx Tracking</title>
     <style>
         body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            background-color: #f5f5f5;
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: #f7f7f7;
             margin: 0;
             padding: 0;
             color: #333;
+            line-height: 1.5;
         }
         .container {
-            max-width: 900px;
-            margin: 20px auto;
+            max-width: 1200px;
+            margin: 0 auto;
             background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 5px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
         .header {
-            background-color: #003087;
+            background-color: #4d148c;
             padding: 20px;
             text-align: center;
-            border-radius: 5px 5px 0 0;
+            color: #fff;
         }
         .header img {
-            height: 50px;
+            height: 40px;
+            margin-bottom: 10px;
         }
         .header h1 {
-            color: #fff;
-            margin: 0;
-            font-size: 24px;
-            font-weight: 500;
+            margin: 0 0 5px 0;
+            font-size: 28px;
+            font-weight: 600;
         }
-        .tracking-form {
-            padding: 30px;
+        .header p {
+            margin: 0;
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        .tracking-form-section {
+            padding: 40px 20px;
             text-align: center;
-            background-color: #f9f9f9;
-            border-bottom: 1px solid #ddd;
+            background-color: #fff;
+        }
+        .form-title {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: #4d148c;
+        }
+        .form-input-wrapper {
+            margin-bottom: 20px;
         }
         .tracking-form input {
-            padding: 12px;
-            width: 250px;
-            font-size: 16px;
-            border: 1px solid #ccc;
+            padding: 15px;
+            width: 100%;
+            max-width: 500px;
+            font-size: 18px;
+            border: 2px solid #ddd;
             border-radius: 4px;
-            margin-right: 10px;
+            box-sizing: border-box;
         }
         .tracking-form button {
-            padding: 12px 25px;
-            font-size: 16px;
+            padding: 15px 40px;
+            font-size: 18px;
             background-color: #ff6600;
             color: #fff;
             border: none;
             border-radius: 4px;
             cursor: pointer;
             transition: background-color 0.3s;
+            margin-left: 10px;
         }
         .tracking-form button:hover {
-            background-color: #e65c00;
+            background-color: #e55a00;
+        }
+        .help-link {
+            color: #ff6600;
+            text-decoration: underline;
+            font-size: 14px;
         }
         .tracking-details {
             display: none;
-            padding: 30px;
-            border-top: 1px solid #ddd;
+            padding: 40px 20px;
+            border-top: 1px solid #eee;
+            background-color: #f9f9f9;
         }
         .tracking-details.show {
             display: block;
         }
-        .tracking-details h2 {
-            color: #003087;
-            font-size: 20px;
-            margin-top: 0;
+        .details-header {
+            font-size: 24px;
+            color: #4d148c;
+            margin-bottom: 20px;
         }
-        .status {
+        .status-bar {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 20px;
+            color: #155724;
             font-weight: bold;
-            color: #006600;
-            font-size: 18px;
         }
-        .location, .timestamp {
-            margin: 15px 0;
-            color: #555;
+        .destination-section {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .destination-section h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        .destination-section p {
+            margin: 5px 0;
+            font-size: 16px;
         }
         .timestamp {
             font-style: italic;
+            color: #666;
+            font-size: 14px;
+        }
+        .view-details-link {
+            color: #ff6600;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .footer {
+            background-color: #4d148c;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            font-size: 14px;
+        }
+        .footer a {
+            color: #fff;
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/7/7a/FedEx_Express.svg" alt="FedEx Logo" onerror="this.src='https://via.placeholder.com/150?text=FedEx+Logo';">
-            <h1>Tracking</h1>
+            <img id="fedexLogo" src="fedex-logo.png" alt="FedEx Logo" style="height: 40px; margin-bottom: 10px;">
+            <h1>Track your shipment</h1>
+            <p>Enter a tracking number, reference, or TCN to get the latest status</p>
         </div>
-        <div class="tracking-form">
-            <input type="text" id="trackingInput" placeholder="Enter Tracking Number">
-            <button onclick="checkTracking()">Track</button>
+        <div class="tracking-form-section">
+            <div class="form-title">Track up to 50 shipments</div>
+            <form class="tracking-form" onsubmit="event.preventDefault(); checkTracking();">
+                <div class="form-input-wrapper">
+                    <input type="text" id="trackingInput" placeholder="Enter up to 50 tracking numbers or a reference number" maxlength="100">
+                </div>
+                <button type="submit">Track</button>
+            </form>
+            <p><a href="#" class="help-link">Need help?</a></p>
         </div>
         <div id="trackingDetails" class="tracking-details">
-            <h2>Tracking Details</h2>
-            <p><span class="status">Status:</span> In Transit</p>
-            <div class="location">
-                <p><strong>Destination:</strong></p>
-                <p>Name: Robert Szulakowski</p>
-                <p>Address: Ul. Krakowska 46/50 m 8, 42-202 Częstochowa</p>
+            <div class="details-header">Shipment Details</div>
+            <div class="status-bar">
+                <strong>Status: In Transit</strong><br>
+                Your package is on the way to its destination.
             </div>
-            <p class="timestamp">Last Update: 09:47 PM WAT, September 20, 2025</p>
+            <div class="destination-section">
+                <h3>Destination</h3>
+                <p><strong>Name:</strong> Robert Szulakowski</p>
+                <p><strong>Address:</strong> Ul. Krakowska 46/50 m 8<br>42-202 Częstochowa</p>
+            </div>
+            <p class="timestamp">Last Update: 10:25 PM WAT, September 20, 2025</p>
+            <p><a href="#" class="view-details-link">View Full Details →</a></p>
+        </div>
+        <div class="footer">
+            <p>&copy; 2025 FedEx. All rights reserved. <a href="#">Privacy Policy</a> | <a href="#">Terms of Use</a></p>
         </div>
     </div>
 
     <script>
         function checkTracking() {
-            const trackingInput = document.getElementById('trackingInput').value;
+            const trackingInput = document.getElementById('trackingInput').value.trim();
             const trackingDetails = document.getElementById('trackingDetails');
-            const validTrackingId = "FX123456789PL";
+            const validTrackingId = "FX847392105PL";
 
             if (trackingInput === validTrackingId) {
                 trackingDetails.classList.add('show');
