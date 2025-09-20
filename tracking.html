@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FedEx Tracking</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background-color: #003087;
+            padding: 20px;
+            text-align: center;
+            border-radius: 5px 5px 0 0;
+        }
+        .header img {
+            height: 50px;
+        }
+        .header h1 {
+            color: #fff;
+            margin: 0;
+            font-size: 24px;
+            font-weight: 500;
+        }
+        .tracking-form {
+            padding: 30px;
+            text-align: center;
+            background-color: #f9f9f9;
+            border-bottom: 1px solid #ddd;
+        }
+        .tracking-form input {
+            padding: 12px;
+            width: 250px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+        .tracking-form button {
+            padding: 12px 25px;
+            font-size: 16px;
+            background-color: #ff6600;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .tracking-form button:hover {
+            background-color: #e65c00;
+        }
+        .tracking-details {
+            display: none;
+            padding: 30px;
+            border-top: 1px solid #ddd;
+        }
+        .tracking-details.show {
+            display: block;
+        }
+        .tracking-details h2 {
+            color: #003087;
+            font-size: 20px;
+            margin-top: 0;
+        }
+        .status {
+            font-weight: bold;
+            color: #006600;
+            font-size: 18px;
+        }
+        .location, .timestamp {
+            margin: 15px 0;
+            color: #555;
+        }
+        .timestamp {
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/7/7a/FedEx_Express.svg" alt="FedEx Logo" onerror="this.src='https://via.placeholder.com/150?text=FedEx+Logo';">
+            <h1>Tracking</h1>
+        </div>
+        <div class="tracking-form">
+            <input type="text" id="trackingInput" placeholder="Enter Tracking Number">
+            <button onclick="checkTracking()">Track</button>
+        </div>
+        <div id="trackingDetails" class="tracking-details">
+            <h2>Tracking Details</h2>
+            <p><span class="status">Status:</span> In Transit</p>
+            <div class="location">
+                <p><strong>Destination:</strong></p>
+                <p>Name: Robert Szulakowski</p>
+                <p
