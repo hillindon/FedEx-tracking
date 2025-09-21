@@ -3,179 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FedEx Tracking</title>
+    <title>Track Your Shipment</title>
     <style>
         body {
-            font-family: system-ui, -apple-system, sans-serif;
-            background-color: #f7f7f7;
-            margin: 0;
-            padding: 0;
+            font-family: Arial, sans-serif;
+            margin: 20px;
             color: #333;
-            line-height: 1.5;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background-color: #fff;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
         .header {
-            background-color: #4d148c;
-            padding: 20px;
-            text-align: center;
+            background-color: #401F6B; /* FedEx purple */
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
             color: #fff;
         }
         .header img {
             height: 40px;
+            margin-right: 10px;
+        }
+        .main-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .tracking-section h1 {
+            color: #401F6B;
+            font-size: 28px;
             margin-bottom: 10px;
         }
-        .header h1 {
-            margin: 0 0 5px 0;
-            font-size: 28px;
-            font-weight: 600;
+        .tracking-section p {
+            margin: 5px 0;
+            color: #666;
         }
-        .header p {
-            margin: 0;
-            font-size: 16px;
-            opacity: 0.9;
-        }
-        .tracking-form-section {
-            padding: 40px 20px;
-            text-align: center;
-            background-color: #fff;
-        }
-        .form-title {
-            font-size: 20px;
-            margin-bottom: 20px;
-            color: #4d148c;
-        }
-        .form-input-wrapper {
-            margin-bottom: 20px;
+        .tracking-form {
+            margin: 20px 0;
+            display: flex;
         }
         .tracking-form input {
-            padding: 15px;
-            width: 100%;
-            max-width: 500px;
-            font-size: 18px;
+            padding: 10px;
+            font-size: 16px;
             border: 2px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
+            border-right: none;
+            border-radius: 4px 0 0 4px;
+            flex: 1;
+        }
+        .tracking-form input:focus {
+            border-color: #FF6600; /* FedEx orange */
         }
         .tracking-form button {
-            padding: 15px 40px;
-            font-size: 18px;
-            background-color: #ff6600;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #401F6B;
             color: #fff;
             border: none;
-            border-radius: 4px;
+            border-radius: 0 4px 4px 0;
             cursor: pointer;
-            transition: background-color 0.3s;
-            margin-left: 10px;
         }
         .tracking-form button:hover {
-            background-color: #e55a00;
+            background-color: #FF6600;
         }
-        .help-link {
-            color: #ff6600;
-            text-decoration: underline;
-            font-size: 14px;
-        }
-        .tracking-details {
+        .details {
             display: none;
-            padding: 40px 20px;
-            border-top: 1px solid #eee;
-            background-color: #f9f9f9;
+            padding: 20px;
+            border: 1px solid #ddd;
+            margin-top: 20px;
+            border-radius: 4px;
         }
-        .tracking-details.show {
+        .details.show {
             display: block;
         }
-        .details-header {
-            font-size: 24px;
-            color: #4d148c;
-            margin-bottom: 20px;
+        .details h2 {
+            color: #401F6B;
+            font-size: 22px;
+            margin-top: 0;
         }
-        .status-bar {
-            background-color: #d4edda;
-            border: 1px solid #c3e6cb;
-            border-radius: 4px;
-            padding: 15px;
-            margin-bottom: 20px;
-            color: #155724;
-            font-weight: bold;
-        }
-        .destination-section {
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-        .destination-section h3 {
-            margin: 0 0 10px 0;
-            color: #333;
-        }
-        .destination-section p {
+        .details p {
             margin: 5px 0;
-            font-size: 16px;
         }
         .timestamp {
             font-style: italic;
             color: #666;
-            font-size: 14px;
-        }
-        .view-details-link {
-            color: #ff6600;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .footer {
-            background-color: #4d148c;
-            color: #fff;
-            text-align: center;
-            padding: 20px;
-            font-size: 14px;
-        }
-        .footer a {
-            color: #fff;
-            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <img id="fedexLogo" src="fedex-logo.png" alt="FedEx Logo" style="height: 40px; margin-bottom: 10px;">
+    <header class="header">
+        <img src="https://pbs.twimg.com/profile_images/1958212957780705280/o3O1d1H__400x400.jpg" alt="FedEx Logo" onerror="this.src='https://via.placeholder.com/40x40/401F6B/FFFFFF?text=FedEx';">
+    </header>
+    <main class="main-content">
+        <section class="tracking-section">
             <h1>Track your shipment</h1>
             <p>Enter a tracking number, reference, or TCN to get the latest status</p>
-        </div>
-        <div class="tracking-form-section">
-            <div class="form-title">Track up to 50 shipments</div>
-            <form class="tracking-form" onsubmit="event.preventDefault(); checkTracking();">
-                <div class="form-input-wrapper">
-                    <input type="text" id="trackingInput" placeholder="Enter up to 50 tracking numbers or a reference number" maxlength="100">
-                </div>
-                <button type="submit">Track</button>
-            </form>
-            <p><a href="#" class="help-link">Need help?</a></p>
-        </div>
-        <div id="trackingDetails" class="tracking-details">
-            <div class="details-header">Shipment Details</div>
-            <div class="status-bar">
-                <strong>Status: In Transit</strong><br>
-                Your package is on the way to its destination.
+            <p>Track up to 50 shipments</p>
+            <p>Need help?</p>
+            <div class="tracking-form">
+                <input type="text" id="trackingInput" placeholder="Enter tracking number">
+                <button onclick="checkTracking()">Track</button>
             </div>
-            <div class="destination-section">
-                <h3>Destination</h3>
-                <p><strong>Name:</strong> Robert Szulakowski</p>
-                <p><strong>Address:</strong> Ul. Krakowska 46/50 m 8<br>42-202 Częstochowa</p>
-            </div>
-            <p class="timestamp">Last Update: 10:25 PM WAT, September 20, 2025</p>
-            <p><a href="#" class="view-details-link">View Full Details →</a></p>
-        </div>
-        <div class="footer">
-            <p>&copy; 2025 FedEx. All rights reserved. <a href="#">Privacy Policy</a> | <a href="#">Terms of Use</a></p>
-        </div>
-    </div>
+        </section>
+        <section id="trackingDetails" class="details">
+            <h2>Shipment Details</h2>
+            <p><strong>Status:</strong> In Transit</p>
+            <p>Your package is on the way to its destination.</p>
+            <h3>Destination</h3>
+            <p>Name: Robert Szulakowski</p>
+            <p>Address: Ul. Krakowska 46/50 m 8</p>
+            <p>42-202 Częstochowa</p>
+            <p class="timestamp">Last Update: 10:05 PM WAT, September 21, 2025</p>
+            <a href="#">View Full Details →</a>
+        </section>
+    </main>
 
     <script>
         function checkTracking() {
