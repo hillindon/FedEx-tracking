@@ -118,6 +118,25 @@
             margin: 5px 0;
             font-size: 16px;
         }
+        .item-image {
+            max-width: 100%;
+            height: auto;
+            margin: 10px 0;
+        }
+        .map-canvas {
+            width: 100%;
+            height: 200px;
+            border: 1px solid #ddd;
+            margin: 10px 0;
+            position: relative;
+        }
+        .map-dot {
+            width: 10px;
+            height: 10px;
+            background-color: red;
+            border-radius: 50%;
+            position: absolute;
+        }
         .timestamp {
             font-style: italic;
             color: #666;
@@ -169,7 +188,9 @@
                 <p><strong>Name:</strong> Robert Szulakowski</p>
                 <p><strong>Address:</strong> Ul. Krakowska 46/50 m 8<br>42-202 Częstochowa</p>
             </div>
-           <p class="timestamp">Last Update: 8:00 AM WAT, September 22, 2025</p>
+            <img id="itemImage" class="item-image" src="" alt="Tracked Item">
+            <canvas id="mapCanvas" class="map-canvas"></canvas>
+            <p class="timestamp">Last Update: 8:00 AM ET, September 22, 2025</p>
             <p><a href="#" class="view-details-link">View Full Details →</a></p>
         </div>
         <div class="footer">
@@ -181,15 +202,89 @@
         function checkTracking() {
             const trackingInput = document.getElementById('trackingInput').value.trim();
             const trackingDetails = document.getElementById('trackingDetails');
+            const itemImage = document.getElementById('itemImage');
+            const mapCanvas = document.getElementById('mapCanvas');
             const validTrackingId = "FX847392105PL";
 
             if (trackingInput === validTrackingId) {
                 trackingDetails.classList.add('show');
+                itemImage.src = "package.jpg"; // Display the package image
+                itemImage.alt = "Image of the tracked item";
+                startMapAnimation(mapCanvas); // Start map animation
             } else {
                 alert("Invalid Tracking Number. Please try again.");
                 trackingDetails.classList.remove('show');
+                itemImage.src = ""; // Clear image if invalid
+                itemImage.alt = "";
+                stopMapAnimation(); // Stop animation if invalid
             }
         }
+
+        let animationFrameId = null;
+
+        function startMapAnimation(canvas) {
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width = canvas.offsetWidth;
+            const height = canvas.height = canvas.offsetHeight;
+
+            // Approximate coordinates (normalized to canvas)
+            const startX = 50; // Kabul, Afghanistan (left side)
+            const startY = height - 50;
+            const endX = width - 50; // Warsaw, Poland (right side)
+            const endY = 50;
+            let progress = 0;
+            const speed = 0.005; // Adjust speed of animation
+
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+
+                // Draw route line
+                ctx.beginPath();
+                ctx.moveTo(startX, startY);
+                ctx.lineTo(endX, endY);
+                ctx.strokeStyle = '#ddd';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                // Draw start and end points
+                ctx.beginPath();
+                ctx.arc(startX, startY, 5, 0, Math.PI * 2);
+                ctx.fillStyle = '#000';
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(endX, endY, 5, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Draw moving dot
+                progress += speed;
+                if (progress >= 1) progress = 1;
+                const currentX = startX + (endX - startX) * progress;
+                const currentY = startY + (endY - startY) * progress;
+                ctx.beginPath();
+                ctx.arc(currentX, currentY, 5, 0, Math.PI * 2);
+                ctx.fillStyle = 'red';
+                ctx.fill();
+
+                if (progress < 1) {
+                    animationFrameId = requestAnimationFrame(animate);
+                }
+            }
+
+            stopMapAnimation(); // Clear any existing animation
+            animate();
+        }
+
+        function stopMapAnimation() {
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+                animationFrameId = null;
+            }
+        }
+
+        // Clean up on page unload
+        window.onbeforeunload = function() {
+            stopMapAnimation();
+        };
     </script>
 </body>
 </html>
